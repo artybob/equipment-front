@@ -1,7 +1,7 @@
 import { TOKEN_COOKIE } from "../utils/constants";
 import axios from '../plugins/axios';
 
-const AUTH_API_URL="http://127.0.0.1:8000"
+const API_URL="http://127.0.0.1:8000"
 const state = {
     user: null,
 };
@@ -23,8 +23,8 @@ const actions = {
     },
     async login({ dispatch }, payload) {
         try {
-            await axios.get(AUTH_API_URL+'/sanctum/csrf-cookie');
-            await axios.post(AUTH_API_URL+'/api/auth/login', payload).then(({data}) => {
+            await axios.get(API_URL+'/sanctum/csrf-cookie');
+            await axios.post(API_URL+'/api/auth/login', payload).then(({data}) => {
                 this.$cookies.remove(TOKEN_COOKIE);
                 this.$cookies.set(TOKEN_COOKIE, data.token);
                dispatch('getUser');
@@ -38,7 +38,7 @@ const actions = {
         }
     },
     async getUser({commit}) {
-      await axios.get(AUTH_API_URL+'/api/auth/me').then(({data}) => {
+      await axios.get(API_URL+'/api/auth/me').then(({data}) => {
         if (data.data) {
           commit('setUser', data.data);
         }
@@ -48,20 +48,6 @@ const actions = {
         this.$cookies.remove(TOKEN_COOKIE);
       })
     },
-    // async verifyOld({dispatch} , payload){
-    //     await axios.post('/api/verify-old', payload).then(({data}) => {
-    //         this.$cookies.set(TOKEN_COOKIE, data.data.access_token,  data.data.expires_in * 60);
-    //     }).catch((err) => {
-    //         throw err.response
-    //     });
-    // },
-    // async verifyCode({dispatch} , payload){
-    //     await axios.post('/api/verify', payload).then((res) => {
-    //         return res
-    //     }).catch((err) => {
-    //         throw err.response
-    //     });
-    // },
     // async logout({ commit }) {
     //     await axios.get('/api/logout').then((res) => {
     //         this.$cookies.remove(TOKEN_COOKIE);
@@ -72,34 +58,6 @@ const actions = {
     //         console.log(err)
     //         this.$cookies.remove(TOKEN_COOKIE);
     //         this.$cookies.set(USER_DATA);
-    //     })
-    // },
-    // async register(context, payload) {
-    //     await axios.post('/api/register', payload).then(({data}) => {
-    //         this.$cookies.set(TOKEN_COOKIE, data.data.access_token,  data.data.expires_in * 60);
-    //     }).catch((err) => {
-    //         throw err.response
-    //     })
-    // },
-    // async registerFinish({dispatch}, payload) {
-    //     await axios.post('/api/registration-finish', payload).then(({data}) => {
-    //         dispatch('getUser');
-    //     }).catch((err) => {
-    //         throw err.response
-    //     })
-    // },
-    // async changePassword({dispatch},payload) {
-    //     await axios.post('/api/change-password', payload).then((res) => {
-    //         dispatch('getUser');
-    //     }).catch((err) => {
-    //         throw err.response
-    //     })
-    // },
-    // async password({commit},payload) {
-    //     await axios.patch('/api/password', payload).then((res) => {
-    //
-    //     }).catch((err) => {
-    //         throw err.response
     //     })
     // },
 };

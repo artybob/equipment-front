@@ -1,6 +1,6 @@
 import axios from '../plugins/axios';
 
-const AUTH_API_URL="http://127.0.0.1:8000"
+const API_URL="http://127.0.0.1:8000"
 const state = {
     user: null,
 };
@@ -16,7 +16,7 @@ const mutations = {
 };
 const actions = {
     async getEquipment({commit}, payload) {
-      await axios.get(AUTH_API_URL+'/api/equipment', {params: {page: payload.page, search: payload.search}}, ).then(({data}) => {
+      await axios.get(API_URL+'/api/equipment/', {params: {page: payload.page, search: payload.search}}, ).then(({data}) => {
         if (data.data) {
           commit('setEquipment', data);
         }
@@ -24,7 +24,14 @@ const actions = {
           commit('setEquipment', [])
       })
     },
-    async removeEquipment({commit}, payload) {
+    async removeEquipment({commit}, id) {
+        await axios.delete(API_URL+'/api/equipment/'+id).then(({data}) => {
+            if (data.data) {
+                commit('setEquipment', data);
+            }
+        }).catch((err) => {
+            commit('setEquipment', [])
+        })
     },
     async addEquipment({commit}, payload) {
     },

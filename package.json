@@ -7,8 +7,10 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.2",
     "@vee-validate/rules": "^4.6.6",
     "axios": "^0.27.2",
+    "fontawesome-free": "^1.0.4",
     "vee-validate": "^4.6.6",
     "vue": "^2.7.7",
     "vue-cookies": "^1.8.1",
