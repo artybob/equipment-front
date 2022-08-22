@@ -1,4 +1,5 @@
 <script setup>
+import SnackAlert from "./components/common/SnackAlert.vue";
 </script>
 
 <template>
@@ -8,6 +9,7 @@
 <!--    </header>-->
 
     <router-view />
+    <SnackAlert></SnackAlert>
   </div>
 </template>
 

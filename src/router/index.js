@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
   if (requiredAuth && !isAuth) {
     next('/login/')
   } else if (requiredGuest && isAuth) { //если юзер уже в системе и пытается получить доступ до роутов гостя
-    next('/cabinet/')
+    next('/equipment/')
   }
   next()
 })
