@@ -188,7 +188,7 @@ export default {
         },
         {text: 'desc', value: 'desc'},
         {text: 'serial_num', value: 'serial_num'},
-        {text: 'type_id', value: 'type_id'},
+        {text: 'type', value: 'type.type'},
         { text: 'Actions', value: 'actions', sortable: false },
       ],
     }),
@@ -213,9 +213,13 @@ export default {
   },
   mounted() {
       this.getEquipment();
+      this.getEquipmentTypes();
   },
   methods: {
-      async getEquipment() {
+    async getEquipmentTypes() {
+      await store.dispatch('equipmentTypes')
+    },
+     async getEquipment() {
         this.payload = {
           'page' : this.page,
           'search': this.search,

@@ -3,16 +3,23 @@ import {eventBus} from '../main'
 
 const API_URL="http://127.0.0.1:8000"
 const state = {
-    user: null,
+    equipment: null,
+    equipmentTypes: null,
 };
 const getters = {
     equipment(state) {
         return state.equipment;
     },
+    equipmentTypes(state) {
+        return state.equipmentTypes;
+    },
 };
 const mutations = {
     setEquipment(state, payload) {
         state.equipment = payload;
+    },
+    setEquipmentTypes(state, payload) {
+        state.equipmentTypes = payload;
     },
 };
 const actions = {
@@ -48,6 +55,15 @@ const actions = {
     async editEquipment({commit}, equipment) {
         await axios.put(API_URL+'/api/equipment/'+equipment.id, equipment ).then(({data}) => {
             if (data.data) {
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    async equipmentTypes() {
+        await axios.get(API_URL+'/api/equipment_types').then(({data}) => {
+            if (data.data) {
+                commit('setEquipmentTypes', data);
             }
         }).catch((err) => {
             console.log(err)
