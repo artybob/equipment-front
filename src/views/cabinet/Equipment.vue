@@ -1,13 +1,5 @@
 <template>
   <v-container>
-      <v-text-field
-          v-model="search"
-          @keyup="getEquipment()"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-      ></v-text-field>
     <v-data-table
         :headers="headers"
         :server-items-length="equipment.meta?.total"
@@ -22,12 +14,18 @@
         <v-toolbar
             flat
         >
-          <v-toolbar-title>My CRUD</v-toolbar-title>
-          <v-divider
-              class="mx-4"
-              inset
-              vertical
-          ></v-divider>
+          <v-toolbar-title>Equipment</v-toolbar-title>
+          <v-text-field
+              style="max-width: 200px"
+              class="ml-3"
+              v-model="search"
+              @keyup="getEquipment()"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              dense
+              hide-details
+          ></v-text-field>
           <v-spacer></v-spacer>
           <v-dialog
               v-model="dialog"
@@ -198,10 +196,10 @@ export default {
           sortable: false,
           value: 'code',
         },
-        {text: 'desc', value: 'desc'},
-        {text: 'serial_num', value: 'serial_num'},
+        {text: 'description', value: 'desc'},
+        {text: 'serial number', value: 'serial_num'},
         {text: 'type', value: 'type.type'},
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'actions', value: 'actions', sortable: false },
       ],
       codeRules: [
         v => !!v || 'code is required',
