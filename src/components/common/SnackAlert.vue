@@ -26,6 +26,10 @@ export default {
       this.alertMessage = response;
       this.alertSnack("error");
     });
+    eventBus.$on("api-success", response => {
+      this.alertMessage = response;
+      this.alertSnack("success");
+    });
   },
   methods: {
     alertSnack(snackColor) {

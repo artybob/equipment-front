@@ -1,7 +1,10 @@
 import { TOKEN_COOKIE } from "../utils/constants";
 import axios from "axios";
 import VueCookies from "vue-cookies";
+import {eventBus} from "../main";
+
 const interceptor = axios.create({});
+
 interceptor.interceptors.request.use((config) => {
     const token = VueCookies.get(TOKEN_COOKIE)
     if (!token) {
@@ -16,14 +19,7 @@ interceptor.interceptors.request.use((config) => {
       return response;
     },
     async (error) => {
-      if (error.response.status === 401) {
-        // error.config.headers[
-        //   "Authorization"
-        // ] = `bearer ${response.data.access_token}`;
-        return axios(error.config);
-      } else {
-        return Promise.reject(error);
-      }
+        eventBus.$emit('api-error', error.response.data.message ?? 'server error');
     }
   );
   

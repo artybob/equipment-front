@@ -65,6 +65,7 @@ router.beforeEach((to, from, next) => {
   const isAuth = window.$cookies.get(TOKEN_COOKIE);
   const requiredAuth = to.matched.some(record => record.meta.isAuth)
   const requiredGuest = to.matched.some(record => record.meta.guest)
+
   if (requiredAuth && !isAuth) {
     next('/login/')
   } else if (requiredGuest && isAuth) { //если юзер уже в системе и пытается получить доступ до роутов гостя

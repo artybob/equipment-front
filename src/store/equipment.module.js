@@ -1,5 +1,5 @@
 import axios from '../plugins/axios';
-import {eventBus} from '../main'
+import {eventBus} from "../main";
 
 const API_URL="http://127.0.0.1:8000"
 const state = {
@@ -30,16 +30,13 @@ const actions = {
         }
       }).catch((err) => {
           commit('setEquipment', [])
-          eventBus.$emit('api-error', err);
           console.log(err)
       })
     },
     async removeEquipment({commit}, id) {
         await axios.delete(API_URL+'/api/equipment/'+id).then(({data}) => {
-            if (data.data) {
-            }
+                eventBus.$emit('api-success', 'cool!');
         }).catch((err) => {
-            eventBus.$emit('api-error', err);
             console.log(err)
         })
     },
@@ -48,7 +45,6 @@ const actions = {
             if (data.data) {
             }
         }).catch((err) => {
-            eventBus.$emit('api-error', err);
             console.log(err)
         })
     },

@@ -47,6 +47,13 @@
             </template>
 
             <v-card>
+              <v-form
+                  ref="form"
+                  lazy-validation
+                  form method="post"
+                  @submit.prevent="save"
+              >
+
               <v-card-title>
                 <span class="text-h5">{{ formTitle }}</span>
               </v-card-title>
@@ -56,49 +63,49 @@
                   <v-row>
                     <v-col
                         cols="12"
-                        sm="6"
-                        md="4"
                     >
                       <v-text-field
                           v-model="editedItem.code"
                           label="Code"
+                          required
+                          :rules="codeRules"
                       ></v-text-field>
                     </v-col>
                     <v-col
                         cols="12"
-                        sm="6"
-                        md="4"
                     >
                       <v-text-field
                           v-model="editedItem.desc"
                           label="Desc"
+                          required
+                          :rules="descRules"
                       ></v-text-field>
                     </v-col>
                     <v-col
                         cols="12"
-                        sm="6"
-                        md="4"
                     >
                       <v-text-field
                           v-model="editedItem.serial_num"
                           label="serial num"
+                          required
+                          :rules="serialNumRules"
                       ></v-text-field>
                     </v-col>
                     <v-col
                         cols="12"
-                        sm="6"
-                        md="4"
                     >
                       <v-select
                           item-text="type"
                           item-value="id"
                           v-model="editedItem.type_id"
                           :items="equipmentTypes"
+                          :rules="equipmentTypeRules"
                           label="type"
                       ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
+
               </v-card-text>
 
               <v-card-actions>
@@ -111,13 +118,15 @@
                   Cancel
                 </v-btn>
                 <v-btn
+                    type="submit"
                     color="blue darken-1"
                     text
-                    @click="save"
+                    :loading="loading"
                 >
                   Save
                 </v-btn>
               </v-card-actions>
+              </v-form>
             </v-card>
 
           </v-dialog>
@@ -194,10 +203,22 @@ export default {
         {text: 'type', value: 'type.type'},
         { text: 'Actions', value: 'actions', sortable: false },
       ],
+      codeRules: [
+        v => !!v || 'code is required',
+      ],
+      descRules: [
+        v => !!v || 'description is required',
+      ],
+      serialNumRules: [
+        v => !!v || 'serial number is required',
+      ],
+      equipmentTypeRules: [
+        v => !!v || 'equipment type is required',
+      ],
     }),
   computed: {
     formTitle () {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.actionType === 1 ? 'New Item' : 'Edit Item'
     },
     equipmentTypes() {
       return store.getters.equipmentTypes
@@ -264,6 +285,10 @@ export default {
     },
 
     async save () {
+      if(!this.$refs.form.validate()) {
+        return
+      }
+
       if (this.actionType) {
         //add
         await store.dispatch('addEquipment', this.editedItem)

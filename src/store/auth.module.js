@@ -29,12 +29,10 @@ const actions = {
                 this.$cookies.set(TOKEN_COOKIE, data.token);
                dispatch('getUser');
             }).catch((err) => {
-                console.log(err.response)
-                throw err.response
+                console.log(err)
             });
         } catch (e) {
             console.log(e)
-            throw e
         }
     },
     async getUser({commit}) {
@@ -62,7 +60,7 @@ const actions = {
             this.$cookies.set(TOKEN_COOKIE, data.token);
             dispatch('getUser');
         }).catch((err) => {
-            throw err.response
+            console.log(err)
         })
     },
 };
