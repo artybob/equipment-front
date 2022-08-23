@@ -48,18 +48,23 @@ const actions = {
         this.$cookies.remove(TOKEN_COOKIE);
       })
     },
-    // async logout({ commit }) {
-    //     await axios.get('/api/logout').then((res) => {
-    //         this.$cookies.remove(TOKEN_COOKIE);
-    //         // this.$cookies.remove(REFRESH_TOKEN_COOKIE);
-    //         this.$cookies.set(USER_DATA);
-    //         commit('setUser', null);
-    //     }).catch((err) => {
-    //         console.log(err)
-    //         this.$cookies.remove(TOKEN_COOKIE);
-    //         this.$cookies.set(USER_DATA);
-    //     })
-    // },
+    async logout({ commit }) {
+        await axios.post(API_URL+'/api/auth/logout').then((res) => {
+            this.$cookies.remove(TOKEN_COOKIE);
+            commit('setUser', null);
+        }).catch((err) => {
+            console.log(err)
+            this.$cookies.remove(TOKEN_COOKIE);
+        })
+    },
+    async register({ dispatch }, user) {
+        await axios.post(API_URL+'/api/auth/register', user).then(({data}) => {
+            this.$cookies.set(TOKEN_COOKIE, data.token);
+            dispatch('getUser');
+        }).catch((err) => {
+            throw err.response
+        })
+    },
 };
 
 export default {

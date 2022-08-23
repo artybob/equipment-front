@@ -48,7 +48,6 @@ import store from '../../store';
 
 export default {
   name: "login",
-  middleware: 'guest',
   data: () => ({
     valid: true,
     user: {email: '', password: ''},
@@ -61,7 +60,6 @@ export default {
     //   v => !!v || 'E-mail is required',
     //   v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
     // ],
-    checkbox: false,
   }),
   mounted() {
     if ((localStorage.getItem('user') !== null)) {
@@ -81,7 +79,9 @@ export default {
       // this.errors = null
 
       try {
-        await store.dispatch('login', {'email': this.user.email, 'password': this.user.password})
+        await store.dispatch('login', {'email': this.user.email, 'password': this.user.password}).then(()=>{
+          this.$router.push('/equipment/')
+        })
         // this.loading = false
         // this.dialogMobileCheck = true
       } catch (e) {

@@ -2,9 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Login from "../views/auth/Login.vue";
-import UserCabinet from "../views/cabinet/UserCabinet.vue";
 import {TOKEN_COOKIE} from "../utils/constants";
 import Equipment from "../views/cabinet/Equipment.vue";
+import Register from "../views/auth/Register.vue";
+import store from "../store";
 
 Vue.use(VueRouter)
 
@@ -26,9 +27,31 @@ const router = new VueRouter({
       }
     },
     {
+      path: '/register',
+      name: 'Register',
+      component: Register,
+      meta: {
+        guest: true,
+      }
+    },
+    {
       path: '/equipment',
       name: 'equipment',
       component: Equipment,
+      meta: {
+        isAuth: true
+      }
+    },
+    {
+      path: "/logout",
+      name: "logout",
+      component: {
+        beforeRouteEnter(to, from, next) {
+          store.dispatch("logout").then(()=>{
+            next('/login/')
+          })
+        }
+      },
       meta: {
         isAuth: true
       }
