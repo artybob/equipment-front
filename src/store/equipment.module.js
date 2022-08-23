@@ -60,10 +60,10 @@ const actions = {
             console.log(err)
         })
     },
-    async equipmentTypes() {
+    async equipmentTypes({commit}) {
         await axios.get(API_URL+'/api/equipment_types').then(({data}) => {
             if (data.data) {
-                commit('setEquipmentTypes', data);
+                commit('setEquipmentTypes', data.data);
             }
         }).catch((err) => {
             console.log(err)

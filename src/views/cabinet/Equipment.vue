@@ -89,10 +89,13 @@
                         sm="6"
                         md="4"
                     >
-                      <v-text-field
+                      <v-select
+                          item-text="type"
+                          item-value="id"
                           v-model="editedItem.type_id"
-                          label="type_id"
-                      ></v-text-field>
+                          :items="equipmentTypes"
+                          label="type"
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -196,6 +199,9 @@ export default {
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
+    equipmentTypes() {
+      return store.getters.equipmentTypes
+    }
   },
   watch: {
     dialog (val) {
