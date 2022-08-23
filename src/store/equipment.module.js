@@ -37,7 +37,7 @@ const actions = {
         })
     },
     async addEquipment({commit}, equipment) {
-        await axios.post(API_URL+'/api/equipment/', {equipment: equipment} ).then(({data}) => {
+        await axios.post(API_URL+'/api/equipment/', equipment).then(({data}) => {
             if (data.data) {
             }
         }).catch((err) => {
@@ -45,14 +45,14 @@ const actions = {
             console.log(err)
         })
     },
-    // async editEquipment({commit}, equipment) {
-    //     await axios.put(API_URL+'/api/equipment/'+id, {equipment: equipment} ).then(({data}) => {
-    //         if (data.data) {
-    //         }
-    //     }).catch((err) => {
-    //         console.log(err)
-    //     })
-    // },
+    async editEquipment({commit}, equipment) {
+        await axios.put(API_URL+'/api/equipment/'+equipment.id, equipment ).then(({data}) => {
+            if (data.data) {
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
 };
 
 export default {

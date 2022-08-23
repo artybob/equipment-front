@@ -40,6 +40,7 @@
                   class="mb-2"
                   v-bind="attrs"
                   v-on="on"
+                  @click="addItem"
               >
                 New Item
               </v-btn>
@@ -115,6 +116,7 @@
                 </v-btn>
               </v-card-actions>
             </v-card>
+
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
@@ -144,6 +146,7 @@
           :length="equipment.meta?.last_page"
       ></v-pagination>
     </div>
+
   </v-container>
 
 </template>
@@ -156,7 +159,6 @@ export default {
   data: () => ({
       page: 1,
       totalEquipment: 0,
-      desserts: [],
       loading: true,
       options: {},
       equipment: [],
@@ -164,8 +166,19 @@ export default {
       payload: {},
       dialog: false,
       dialogDelete: false,
-      editedItem: '',
-
+      editedItem: {
+        code: '',
+        desc: '',
+        serial_num: '',
+        type_id: '',
+      },
+      actionType: null,
+      defaultItem: {
+        code: '',
+        desc: '',
+        serial_num: '',
+        type_id: '',
+      },
       headers: [
         {
           text: 'code',
@@ -216,7 +229,7 @@ export default {
       await this.getEquipment()
     },
     deleteItem (item) {
-      this.editedItem = item
+      this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
     deleteItemConfirm() {
@@ -226,9 +239,13 @@ export default {
     closeDelete () {
       this.dialogDelete = false
     },
-
+    addItem() {
+      this.actionType = 1
+      this.editedItem = this.defaultItem
+    },
     editItem (item) {
-      this.editedItem = item
+      this.actionType = 0
+      this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
@@ -237,15 +254,14 @@ export default {
     },
 
     async save () {
-      // if (this.editedIndex > -1) {
-      //   Object.assign(this.desserts[this.editedIndex], this.editedItem)
-      // } else {
-      //   this.desserts.push(this.editedItem)
-      // }
-
-      await store.dispatch('addEquipment', this.editedItem)
+      if (this.actionType) {
+        //add
+        await store.dispatch('addEquipment', this.editedItem)
+      } else {
+        //edit
+        await store.dispatch('editEquipment', this.editedItem)
+      }
       await this.getEquipment()
-
       this.close()
     },
   }
