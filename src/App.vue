@@ -5,16 +5,17 @@ import Footer from "./components/App/Footer.vue";
 </script>
 
 <template>
-  <div id="app" data-app>
-    <header>
-    </header>
+  <v-app>
     <Navbar></Navbar>
 
-    <router-view />
-    <SnackAlert></SnackAlert>
+    <div>
+      <router-view />
+      <SnackAlert></SnackAlert>
+    </div>
+
     <Footer></Footer>
 
-  </div>
+  </v-app>
 </template>
 
 <script>
