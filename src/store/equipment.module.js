@@ -33,21 +33,21 @@ const actions = {
     },
     async removeEquipment({commit}, id) {
         await axios.delete(API_URL+'/api/equipment/'+id).then(({data}) => {
-                eventBus.$emit('api-success', data?.message ?? 'cool!');
+                eventBus.$emit('api-success', data?.message);
         }).catch((err) => {
             console.log(err)
         })
     },
     async addEquipment({commit}, equipment) {
         await axios.post(API_URL+'/api/equipment/', equipment).then(({data}) => {
-                eventBus.$emit('api-success', data?.message ?? 'cool!');
+                eventBus.$emit('api-success', data?.message);
         }).catch((err) => {
             console.log(err)
         })
     },
     async editEquipment({commit}, equipment) {
         await axios.put(API_URL+'/api/equipment/'+equipment.id, equipment ).then(({data}) => {
-            eventBus.$emit('api-success', data?.message ?? 'cool!');
+            eventBus.$emit('api-success', data?.message);
         }).catch((err) => {
             console.log(err)
         })

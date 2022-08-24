@@ -5,12 +5,12 @@
         <v-form
             class="mt-16"
             ref="form"
-            v-model="valid"
             lazy-validation
             form method="post"
             @submit.prevent="register"
         >
           <v-text-field
+              :rules="emailRules"
               v-model="user.email"
               label="E-mail"
               required
@@ -18,13 +18,15 @@
           ></v-text-field>
 
           <v-text-field
+              :rules="nameRules"
               v-model="user.name"
-              label="Nickname"
+              label="Name"
               required
               @change="saveUserStorage()"
           ></v-text-field>
 
           <v-text-field
+              :rules="passwordRules"
               v-model="user.password"
               label="Password"
               required
@@ -32,10 +34,10 @@
           ></v-text-field>
 
           <v-btn
+              :loading="loading"
               type="submit"
               class="mr-4"
           >
-            <!--            :disabled="!valid"-->
             Register
           </v-btn>
         </v-form>
@@ -54,6 +56,18 @@ export default {
         return {
           valid: true,
           user: {email: '', password: '', name: ''},
+          loading: false,
+          emailRules: [
+            v => !!v || 'E-mail is required',
+            v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+          ],
+          passwordRules: [
+            v => !!v || 'Password is required',
+            v => (v && v.length >= 5) || 'Password must be more than 5 characters',
+          ],
+          nameRules: [
+            v => (v && v.length >= 5) || 'Name must be more than 2 characters',
+          ],
         }
     },
     methods: {
@@ -61,17 +75,17 @@ export default {
           localStorage.setItem('user', JSON.stringify({email: this.user.email, password: this.user.password, name: this.user.name}));
         },
         async register() {
-          try {
-            await store.dispatch('register', this.user).then(() => {
-              this.$router.push('/equipment/')
-            })
-            // this.loading = false
-            // this.dialogMobileCheck = true
-          } catch (e) {
-            console.log(e)
-            // this.loading = false
-            // this.errors = true
+          if(!this.$refs.form.validate()) {
+            return
           }
+          this.loading = true
+            await store.dispatch('register', this.user).then(() => {
+              this.$router.push('/login')
+            }).catch((e) => {
+              console.log(e)
+            }).finally(()=> {
+              this.loading = false
+            })
         },
     },
     mounted() {

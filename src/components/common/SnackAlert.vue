@@ -23,11 +23,11 @@ export default {
   }),
   created() {
     eventBus.$on("api-error", response => {
-      this.alertMessage = response;
+      this.alertMessage = response ?? 'server error';
       this.alertSnack("error");
     });
     eventBus.$on("api-success", response => {
-      this.alertMessage = response;
+      this.alertMessage = response ?? 'cool!';
       this.alertSnack("success");
     });
   },
