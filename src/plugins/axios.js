@@ -19,7 +19,7 @@ interceptor.interceptors.request.use((config) => {
       return response;
     },
     async (error) => {
-        eventBus.$emit('api-error', error.response.data.message ?? 'server error');
+        eventBus.$emit('api-error', error?.response?.data?.message ?? 'server error');
     }
   );
   

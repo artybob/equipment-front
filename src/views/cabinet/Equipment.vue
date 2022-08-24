@@ -57,6 +57,33 @@
                     <span class="text-h5">{{ formTitle }}</span>
                   </v-card-title>
 
+                  <v-card-text v-if="equipmentsToSave.length > 0">
+                    <v-card class="secondary">
+                      <v-list  dense v-if="actionType === 1">
+                        <v-list-item-title>
+                          <div class="ml-4">Save list</div>
+                        </v-list-item-title>
+                        <v-list-item v-for="(item,index) in equipmentsToSave">
+                          {{index+1}} )
+                          <div class=" ml-3">
+                            <small>code</small>
+                            <b class="ml-2">{{item.code}}</b>
+                            <small class="ml-2">serial</small>
+                            <b class="ml-2">{{item.serial_num}}</b>
+                          </div>
+                          <v-spacer></v-spacer>
+                          <v-btn style="color: red;" text @click="removeEquipmentsToSave(index)">
+                            <i class="fa-solid fa-square-minus">
+
+                            </i>
+                          </v-btn>
+                        </v-list-item>
+                      </v-list>
+                    </v-card>
+
+                  </v-card-text>
+
+
                   <v-card-text>
                     <v-container>
                       <v-row>
@@ -117,6 +144,16 @@
                       Cancel
                     </v-btn>
                     <v-btn
+                        v-if="actionType === 1"
+                        color="blue darken-1"
+                        text
+                        @click="addEquipmentsToSave()"
+                        :loading="loading"
+                    >
+                      Add To Save ({{ equipmentsToSave.length }})
+                    </v-btn>
+
+                    <v-btn
                         type="submit"
                         color="blue darken-1"
                         text
@@ -174,6 +211,7 @@ export default {
       loading: true,
       options: {},
       equipment: [],
+      equipmentsToSave: [],
       search: '',
       payload: {},
       dialog: false,
@@ -283,21 +321,44 @@ export default {
     close () {
       this.dialog = false
     },
-
-    async save () {
+    addEquipmentsToSave() {
       if(!this.$refs.form.validate()) {
         return
       }
 
+      if (this.equipmentsToSave.length > 3) {
+        return false
+      }
+      this.equipmentsToSave.push({...this.editedItem})
+    },
+    removeEquipmentsToSave(index) {
+      this.equipmentsToSave.splice(index, 1);
+    },
+
+    async save () {
       if (this.actionType) {
-        //add
-        await store.dispatch('addEquipment', this.editedItem)
+        //store
+        if(this.equipmentsToSave.length > 0) {
+          await store.dispatch('storeEquipment', this.equipmentsToSave).then(()=> {
+            this.getEquipment()
+            this.close()
+          }).catch((e) => {
+            console.log(e)
+          })
+        }
+
       } else {
         //edit
-        await store.dispatch('editEquipment', this.editedItem)
+        if(!this.$refs.form.validate()) {
+          return
+        }
+
+        await store.dispatch('editEquipment', this.editedItem).then(()=> {
+          this.getEquipment()
+          this.close()
+        })
       }
-      await this.getEquipment()
-      this.close()
+
     },
   }
 }

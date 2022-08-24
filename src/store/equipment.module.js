@@ -38,8 +38,8 @@ const actions = {
             console.log(err)
         })
     },
-    async addEquipment({commit}, equipment) {
-        await axios.post(API_URL+'/api/equipment/', equipment).then(({data}) => {
+    async storeEquipment({commit}, equipments) {
+        await axios.post(API_URL+'/api/equipment/', equipments).then(({data}) => {
                 eventBus.$emit('api-success', data?.message);
         }).catch((err) => {
             console.log(err)

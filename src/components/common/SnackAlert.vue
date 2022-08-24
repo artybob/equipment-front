@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     alertSnack(snackColor) {
+      this.snackbar = false;
       this.snackColor = snackColor;
       this.snackbar = true;
     },
