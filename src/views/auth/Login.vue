@@ -4,6 +4,7 @@
       <v-col cols="12" sm="6">
 
         <v-form
+            class="mt-16"
             ref="form"
             lazy-validation
             form method="post"

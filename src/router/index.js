@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import Login from "../views/auth/Login.vue";
 import {TOKEN_COOKIE} from "../utils/constants";
 import Equipment from "../views/cabinet/Equipment.vue";
 import Register from "../views/auth/Register.vue";
 import store from "../store";
+import About from "../views/cabinet/About.vue";
+import Welcome from "../views/other/Welcome.vue";
 
 Vue.use(VueRouter)
 
@@ -14,16 +15,19 @@ const router = new VueRouter({
   base: import.meta.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
       path: '/login',
       name: 'Login',
       component: Login,
       meta: {
         guest: true,
+      }
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: About,
+      meta: {
+        isAuth: true
       }
     },
     {
@@ -55,6 +59,11 @@ const router = new VueRouter({
       meta: {
         isAuth: true
       }
+    },
+    {
+      path: '/',
+      name: 'Welcome',
+      component: Welcome,
     },
   ]
 })

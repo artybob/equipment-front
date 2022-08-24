@@ -73,12 +73,12 @@
                         <v-col
                             cols="12"
                         >
-                          <v-text-field
+                          <v-textarea
                               v-model="editedItem.desc"
                               label="Desc"
                               required
                               :rules="descRules"
-                          ></v-text-field>
+                          ></v-textarea>
                         </v-col>
                         <v-col
                             cols="12"
@@ -152,6 +152,7 @@
       </v-data-table>
       <div v-if="equipment" class="text-center pt-2">
         <v-pagination
+            v-if="equipment.meta?.last_page > 1"
             :disabled="loading"
             v-model="page"
             :length="equipment.meta?.last_page"
@@ -170,7 +171,6 @@ import store from "../../store";
 export default {
   data: () => ({
       page: 1,
-      totalEquipment: 0,
       loading: true,
       options: {},
       equipment: [],

@@ -3,6 +3,7 @@
     <v-row justify="center" align="center">
       <v-col cols="12" sm="6">
         <v-form
+            class="mt-16"
             ref="form"
             v-model="valid"
             lazy-validation

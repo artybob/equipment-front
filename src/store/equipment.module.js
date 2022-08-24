@@ -25,9 +25,7 @@ const mutations = {
 const actions = {
     async getEquipment({commit}, payload) {
       await axios.get(API_URL+'/api/equipment/', {params: {page: payload.page, search: payload.search}}, ).then(({data}) => {
-        if (data.data) {
           commit('setEquipment', data);
-        }
       }).catch((err) => {
           commit('setEquipment', [])
           console.log(err)
@@ -35,32 +33,28 @@ const actions = {
     },
     async removeEquipment({commit}, id) {
         await axios.delete(API_URL+'/api/equipment/'+id).then(({data}) => {
-                eventBus.$emit('api-success', 'cool!');
+                eventBus.$emit('api-success', data?.message ?? 'cool!');
         }).catch((err) => {
             console.log(err)
         })
     },
     async addEquipment({commit}, equipment) {
         await axios.post(API_URL+'/api/equipment/', equipment).then(({data}) => {
-            if (data.data) {
-            }
+                eventBus.$emit('api-success', data?.message ?? 'cool!');
         }).catch((err) => {
             console.log(err)
         })
     },
     async editEquipment({commit}, equipment) {
         await axios.put(API_URL+'/api/equipment/'+equipment.id, equipment ).then(({data}) => {
-            if (data.data) {
-            }
+            eventBus.$emit('api-success', data?.message ?? 'cool!');
         }).catch((err) => {
             console.log(err)
         })
     },
     async equipmentTypes({commit}) {
-        await axios.get(API_URL+'/api/equipment_types').then(({data}) => {
-            if (data.data) {
+        await axios.get(API_URL+'/api/equipment-type').then(({data}) => {
                 commit('setEquipmentTypes', data.data);
-            }
         }).catch((err) => {
             console.log(err)
         })
