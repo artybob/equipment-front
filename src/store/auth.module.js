@@ -23,7 +23,6 @@ const actions = {
         ])
     },
     async login({ dispatch }, payload) {
-        try {
             await axios.get(API_URL+'/sanctum/csrf-cookie');
             await axios.post(API_URL+'/api/auth/login', payload).then(({data}) => {
                 if(data.data.token) {
@@ -31,12 +30,7 @@ const actions = {
                     this.$cookies.set(TOKEN_COOKIE, data.data.token);
                     dispatch('getUser');
                 }
-            }).catch((err) => {
-                console.log(err)
-            });
-        } catch (e) {
-            console.log(e)
-        }
+            })
     },
     async getUser({commit}) {
       await axios.get(API_URL+'/api/auth/me').then(({data}) => {
@@ -44,7 +38,6 @@ const actions = {
           commit('setUser', data.data);
         }
       }).catch((err) => {
-          console.log(err)
         commit('setUser', null);
         this.$cookies.remove(TOKEN_COOKIE);
       })
@@ -54,7 +47,6 @@ const actions = {
             this.$cookies.remove(TOKEN_COOKIE);
             commit('setUser', null);
         }).catch((err) => {
-            console.log(err)
             this.$cookies.remove(TOKEN_COOKIE);
         })
     },

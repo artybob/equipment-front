@@ -12,7 +12,7 @@
             class="text-center white--text"
             cols="12"
         >
-          {{ new Date().getFullYear() }} — <strong><a href="https://github.com/artybob">Arty Bob</a></strong>
+          {{ new Date().getFullYear() }} — <strong><a class="white--text" href="https://github.com/artybob">Arty Bob</a></strong>
         </v-col>
       </v-row>
     </v-container>

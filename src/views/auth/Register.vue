@@ -66,7 +66,7 @@ export default {
             v => (v && v.length >= 5) || 'Password must be more than 5 characters',
           ],
           nameRules: [
-            v => (v && v.length >= 5) || 'Name must be more than 2 characters',
+            v => (v && v.length >= 2) || 'Name must be more than 2 characters',
           ],
         }
     },
@@ -82,7 +82,6 @@ export default {
             await store.dispatch('register', this.user).then(() => {
               this.$router.push('/login')
             }).catch((e) => {
-              console.log(e)
             }).finally(()=> {
               this.loading = false
             })

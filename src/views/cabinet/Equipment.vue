@@ -17,12 +17,12 @@
           >
             <v-toolbar-title>Equipment</v-toolbar-title>
             <v-text-field
-                style="max-width: 200px"
-                class="ml-3"
+                style="max-width: 400px"
+                class="ml-4"
                 v-model="search"
                 @keyup="getEquipment()"
                 append-icon="mdi-magnify"
-                label="Search"
+                label="Search in (desc, serial)"
                 single-line
                 dense
                 hide-details
@@ -59,17 +59,17 @@
 
                   <v-card-text v-if="equipmentsToSave.length > 0">
                     <v-card class="secondary">
-                      <v-list  dense v-if="actionType === 1">
+                      <v-list dense v-if="actionType === 1">
                         <v-list-item-title>
                           <div class="ml-4">Save list</div>
                         </v-list-item-title>
                         <v-list-item v-for="(item,index) in equipmentsToSave">
-                          {{index+1}} )
+                          {{ index + 1 }} )
                           <div class=" ml-3">
                             <small>code</small>
-                            <b class="ml-2">{{item.code}}</b>
+                            <b class="ml-2">{{ item.code }}</b>
                             <small class="ml-2">serial</small>
-                            <b class="ml-2">{{item.serial_num}}</b>
+                            <b class="ml-2">{{ item.serial_num }}</b>
                           </div>
                           <v-spacer></v-spacer>
                           <v-btn style="color: red;" text @click="removeEquipmentsToSave(index)">
@@ -112,7 +112,7 @@
                         >
                           <v-text-field
                               v-model="editedItem.serial_num"
-                              label="serial number (must be unique)"
+                              label="serial number (must be unique and valid mask type)"
                               required
                               :rules="serialNumRules"
                           ></v-text-field>
@@ -180,10 +180,12 @@
           </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
-          <i class="fa-solid fa-pen-to-square mr-4"
+          <i class="fa-solid fa-pen-to-square mr-4 secondary--text"
+             style="cursor: pointer"
              @click="editItem(item)">
           </i>
-          <i class="fa-solid fa-square-minus"
+          <i class="fa-solid fa-square-minus red--text"
+             style="cursor: pointer"
              @click="deleteItem(item)"></i>
         </template>
       </v-data-table>
@@ -207,58 +209,58 @@ import store from "../../store";
 
 export default {
   data: () => ({
-      page: 1,
-      loading: true,
-      options: {},
-      equipment: [],
-      equipmentsToSave: [],
-      search: '',
-      payload: {},
-      dialog: false,
-      dialogDelete: false,
-      editedItem: {
-        code: '',
-        desc: '',
-        serial_num: '',
-        type_id: '',
+    page: 1,
+    loading: true,
+    options: {},
+    equipment: [],
+    equipmentsToSave: [],
+    search: '',
+    payload: {},
+    dialog: false,
+    dialogDelete: false,
+    editedItem: {
+      code: '',
+      desc: '',
+      serial_num: '',
+      type_id: '',
+    },
+    actionType: null,
+    defaultItem: {
+      code: '',
+      desc: '',
+      serial_num: '',
+      type_id: '',
+    },
+    headers: [
+      {
+        text: 'code',
+        align: 'start',
+        sortable: false,
+        value: 'code',
       },
-      actionType: null,
-      defaultItem: {
-        code: '',
-        desc: '',
-        serial_num: '',
-        type_id: '',
-      },
-      headers: [
-        {
-          text: 'code',
-          align: 'start',
-          sortable: false,
-          value: 'code',
-        },
-        {text: 'description', value: 'desc'},
-        {text: 'serial number', value: 'serial_num'},
-        {text: 'type', value: 'type.type'},
-        { text: 'actions', value: 'actions', sortable: false },
-      ],
-      codeRules: [
-        v => !!v || 'code is required',
-        v => (v && v.length <= 10) || 'Password must be less than 10 characters',
-      ],
-      descRules: [
-        v => !!v || 'description is required',
-        v => (v && v.length <= 300) || 'Password must be less than 300 characters',
-      ],
-      serialNumRules: [
-        v => !!v || 'serial number is required',
-        v => (v && v.length <= 25) || 'Password must be less than 25 characters',
-      ],
-      equipmentTypeRules: [
-        v => !!v || 'equipment type is required',
-      ],
-    }),
+      {text: 'description', value: 'desc'},
+      {text: 'serial number', value: 'serial_num'},
+      {text: 'type', value: 'type.type'},
+      {text: 'actions', value: 'actions', sortable: false},
+    ],
+    codeRules: [
+      v => !!v || 'code is required',
+      v => (v && v.length <= 10) || 'Password must be less than 10 characters',
+    ],
+    descRules: [
+      v => !!v || 'description is required',
+      v => (v && v.length <= 300) || 'Password must be less than 300 characters',
+    ],
+    serialNumRules: [
+      v => !!v || 'serial number is required',
+      v => (v && v.length <= 25) || 'Password must be less than 25 characters',
+    ],
+    equipmentTypeRules: [
+      v => !!v || 'equipment type is required',
+    ],
+  }),
   computed: {
-    formTitle () {
+    formTitle() {
       return this.actionType === 1 ? 'New Item' : 'Edit Item'
     },
     equipmentTypes() {
@@ -266,10 +268,10 @@ export default {
     }
   },
   watch: {
-    dialog (val) {
+    dialog(val) {
       val || this.close()
     },
-    dialogDelete (val) {
+    dialogDelete(val) {
       val || this.closeDelete()
     },
     options: {
@@ -280,27 +282,27 @@ export default {
     },
   },
   mounted() {
-      this.getEquipment();
-      this.getEquipmentTypes();
+    this.getEquipment();
+    this.getEquipmentTypes();
   },
   methods: {
     async getEquipmentTypes() {
       await store.dispatch('equipmentTypes')
     },
-     async getEquipment() {
-        this.payload = {
-          'page' : this.page,
-          'search': this.search,
-        }
-        await store.dispatch('getEquipment', this.payload)
-        this.equipment = store.getters.equipment
-        this.loading = false
-      },
+    async getEquipment() {
+      this.payload = {
+        'page': this.page,
+        'search': this.search,
+      }
+      await store.dispatch('getEquipment', this.payload)
+      this.equipment = store.getters.equipment
+      this.loading = false
+    },
     async removeEquipment(id) {
       await store.dispatch('removeEquipment', id)
       await this.getEquipment()
     },
-    deleteItem (item) {
+    deleteItem(item) {
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
@@ -308,38 +310,36 @@ export default {
       this.removeEquipment(this.editedItem.id)
       this.closeDelete()
     },
-    closeDelete () {
+    closeDelete() {
       this.dialogDelete = false
     },
     addItem() {
       this.actionType = 1
       this.editedItem = this.defaultItem
     },
-    editItem (item) {
+    editItem(item) {
       this.actionType = 0
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
-
-    close () {
+    close() {
       this.dialog = false
     },
     addEquipmentsToSave() {
-      if(!this.$refs.form.validate()) {
+      if (!this.$refs.form.validate()) {
         return
       }
-
       if (this.equipmentsToSave.length > 3) {
         return
       }
       let valid = true
       this.equipmentsToSave.forEach(item => {
-        if(item.serial_num == this.editedItem.serial_num) {
+        if (item.serial_num == this.editedItem.serial_num) {
           //if serial not unique
           valid = false
         }
       });
-      if(!valid) {
+      if (!valid) {
         return;
       }
 
@@ -349,25 +349,23 @@ export default {
       this.equipmentsToSave.splice(index, 1);
     },
 
-    async save () {
+    async save() {
       if (this.actionType) {
         //store
-        if(this.equipmentsToSave.length > 0) {
-          await store.dispatch('storeEquipment', this.equipmentsToSave).then(()=> {
+        if (this.equipmentsToSave.length > 0) {
+          await store.dispatch('storeEquipment', this.equipmentsToSave).then(() => {
             this.getEquipment()
             this.close()
           }).catch((e) => {
-            console.log(e)
           })
         }
 
       } else {
         //edit
-        if(!this.$refs.form.validate()) {
+        if (!this.$refs.form.validate()) {
           return
         }
-
-        await store.dispatch('editEquipment', this.editedItem).then(()=> {
+        await store.dispatch('editEquipment', this.editedItem).then(() => {
           this.getEquipment()
           this.close()
         })
