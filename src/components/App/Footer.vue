@@ -4,17 +4,17 @@
       fixed
   >
     <v-container>
-    <v-row
-        justify="center"
-        no-gutters
-    >
-      <v-col
-          class="text-center white--text"
-          cols="12"
+      <v-row
+          justify="center"
+          no-gutters
       >
-        {{ new Date().getFullYear() }} — <strong><a href="https://github.com/artybob">Arty Bob</a></strong>
-      </v-col>
-    </v-row>
+        <v-col
+            class="text-center white--text"
+            cols="12"
+        >
+          {{ new Date().getFullYear() }} — <strong><a href="https://github.com/artybob">Arty Bob</a></strong>
+        </v-col>
+      </v-row>
     </v-container>
   </v-footer>
 </template>
@@ -22,8 +22,7 @@
 <script>
 export default {
   name: "Footer",
-  data: () => ({
-  }),
+  data: () => ({}),
 }
 </script>
 

@@ -1,5 +1,4 @@
 <template>
-
   <v-snackbar right top v-model="snackbar" :timeout="timeout" :color="snackColor"
   >{{ alertMessage }}
     <template v-slot:action="{ attrs }">

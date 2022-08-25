@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <div class="mt-10">
-    <h2>About</h2>
-    this app was created for job interviews and code samples.
+      <h2>About</h2>
+      this app was created for job interviews and code samples.
       <ul>
         <li>
           <a href="https://github.com/artybob/equipment-front">git front</a>
@@ -25,7 +25,6 @@
         </li>
       </ul>
     </div>
-
   </v-container>
 </template>
 

@@ -7,14 +7,11 @@ import Footer from "./components/App/Footer.vue";
 <template>
   <v-app>
     <Navbar></Navbar>
-
     <div>
       <router-view />
       <SnackAlert></SnackAlert>
     </div>
-
     <Footer></Footer>
-
   </v-app>
 </template>
 
@@ -38,7 +35,6 @@ export default {
     }
     this.loading = false
   }
-
 }
 </script>
 

@@ -112,7 +112,7 @@
                         >
                           <v-text-field
                               v-model="editedItem.serial_num"
-                              label="serial num"
+                              label="serial number (must be unique)"
                               required
                               :rules="serialNumRules"
                           ></v-text-field>
@@ -243,12 +243,15 @@ export default {
       ],
       codeRules: [
         v => !!v || 'code is required',
+        v => (v && v.length <= 10) || 'Password must be less than 10 characters',
       ],
       descRules: [
         v => !!v || 'description is required',
+        v => (v && v.length <= 300) || 'Password must be less than 300 characters',
       ],
       serialNumRules: [
         v => !!v || 'serial number is required',
+        v => (v && v.length <= 25) || 'Password must be less than 25 characters',
       ],
       equipmentTypeRules: [
         v => !!v || 'equipment type is required',
@@ -327,8 +330,19 @@ export default {
       }
 
       if (this.equipmentsToSave.length > 3) {
-        return false
+        return
       }
+      let valid = true
+      this.equipmentsToSave.forEach(item => {
+        if(item.serial_num == this.editedItem.serial_num) {
+          //if serial not unique
+          valid = false
+        }
+      });
+      if(!valid) {
+        return;
+      }
+
       this.equipmentsToSave.push({...this.editedItem})
     },
     removeEquipmentsToSave(index) {
